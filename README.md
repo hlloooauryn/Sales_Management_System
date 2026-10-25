@@ -1,5 +1,4 @@
-# 🌸 BLOOM MOMENT — Integrated Laravel Inventory & Sales Management System
-> **Proyek Ujian Tengah Semester (UTS) — Web Programming 2**  
+# 🌸 BLOOM MOMENT — Integrated Laravel Inventory & Sales Management System 
 > Dibuat dengan arsitektur **Laravel MVC**, database relasional **MySQL (XAMPP)**, dan antarmuka **Blade Templating** dengan estetika natural toko bunga.
 
 ---
