@@ -21,7 +21,7 @@ Sistem telah dilengkapi dengan akun bawaan (*seeder*):
 
 ---
 
-## 🛠️ Persyaratan Lingkungan (*Prerequisites*)
+## Persyaratan Lingkungan (*Prerequisites*)
 
 1. **PHP**: Versi 8.2 atau lebih baru (dengan ekstensi `pdo_mysql`, `mbstring`, `openssl`, `fileinfo` aktif).
 2. **Web Server & Database**: XAMPP (Apache & MySQL / MariaDB).
@@ -30,7 +30,7 @@ Sistem telah dilengkapi dengan akun bawaan (*seeder*):
 
 ---
 
-## 🚀 Panduan Instalasi & Menjalankan Aplikasi
+## Panduan Instalasi & Menjalankan Aplikasi
 
 Jika Anda menyalin proyek ini ke komputer baru, ikuti langkah berikut:
 
@@ -63,7 +63,7 @@ Buka peramban (*browser*) dan akses: **`http://127.0.0.1:8000`**
 
 ---
 
-## 🗄️ Struktur Database & Relasi (8 Tabel Inti)
+## Struktur Database & Relasi (8 Tabel Inti)
 
 Sistem menggunakan 8 tabel yang saling terhubung dengan foreign key dan proteksi referensial:
 
@@ -93,7 +93,7 @@ Sistem menggunakan 8 tabel yang saling terhubung dengan foreign key dan proteksi
 ## Aturan Bisnis & Konsistensi Stok (Atomisitas)
 
 1. **Pembelian / Restock Bunga (Barang Masuk)**:
-   - **Khusus Admin / Owner** di menu **Pembelian (Masuk)**. Akun Staff dibatasi dan dilarang melakukan pembelian supplier.
+   - **Admin / Owner dan Staff** di menu **Pembelian (Masuk)**.
    - Menggunakan `DB::beginTransaction()`.
    - Total dihitung ulang di server (`qty * unit_cost`) untuk mencegah manipulasi form.
    - Stok fisik produk bertambah otomatis: `stock = stock + quantity`.
@@ -113,7 +113,7 @@ Sistem menggunakan 8 tabel yang saling terhubung dengan foreign key dan proteksi
 
 ---
 
-## 📋 Skenario Pengujian untuk Sidang
+## Skenario Pengujian untuk Sidang
 
 | No | Skenario Uji | Langkah Pengujian | Hasil yang Diharapkan | Status |
 | :---: | :--- | :--- | :--- | :---: |
