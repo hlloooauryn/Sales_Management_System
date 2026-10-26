@@ -93,7 +93,7 @@ Sistem menggunakan 8 tabel yang saling terhubung dengan foreign key dan proteksi
 ## Aturan Bisnis & Konsistensi Stok (Atomisitas)
 
 1. **Pembelian / Restock Bunga (Barang Masuk)**:
-   - **Admin / Owner dan Staff** di menu **Pembelian (Masuk)**.
+   - **Admin / Owner dan Staff** dapat melakukan restok di menu **Pembelian (Masuk)**.
    - Menggunakan `DB::beginTransaction()`.
    - Total dihitung ulang di server (`qty * unit_cost`) untuk mencegah manipulasi form.
    - Stok fisik produk bertambah otomatis: `stock = stock + quantity`.
