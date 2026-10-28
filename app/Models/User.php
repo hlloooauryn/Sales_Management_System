@@ -21,6 +21,8 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
+        'address',
         'password',
         'role',
     ];
@@ -62,6 +64,22 @@ class User extends Authenticatable
     public function isStaff(): bool
     {
         return $this->role === 'staff';
+    }
+
+    /**
+     * Periksa apakah pengguna memiliki role user/pelanggan
+     */
+    public function isUser(): bool
+    {
+        return $this->role === 'user' || $this->role === 'customer';
+    }
+
+    /**
+     * Alias untuk isUser
+     */
+    public function isCustomer(): bool
+    {
+        return $this->isUser();
     }
 
     /**

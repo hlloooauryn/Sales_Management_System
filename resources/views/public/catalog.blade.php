@@ -107,9 +107,20 @@
                             <span style="font-size: 11px; text-transform: uppercase; color: var(--color-text-muted); display: block;">Harga</span>
                             <span class="product-price">Rp {{ number_format($product->sell_price, 0, ',', '.') }}</span>
                         </div>
-                        <a href="{{ route('product.detail', $product->slug) }}" class="btn btn-outline btn-sm">
-                            Detail →
-                        </a>
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            @if($product->stock > 0)
+                                <form action="{{ route('cart.add') }}" method="POST" style="margin: 0;">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <button type="submit" class="btn btn-secondary btn-sm" style="padding: 6px 11px; font-size: 13px;" title="Masukkan ke Keranjang">
+                                        🛒 +
+                                    </button>
+                                </form>
+                            @endif
+                            <a href="{{ route('product.detail', $product->slug) }}" class="btn btn-outline btn-sm">
+                                Detail →
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

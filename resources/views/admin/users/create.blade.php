@@ -30,6 +30,7 @@
                     <label class="form-label" for="role">Hak Akses / Peran (Role) <span class="req">*</span></label>
                     <select name="role" id="role" class="form-control" required>
                         <option value="">Pilih Peran Akun</option>
+                        <option value="user" {{ old('role') === 'user' ? 'selected' : '' }}>User (Pelanggan / Pembeli Online)</option>
                         <option value="staff" {{ old('role') === 'staff' ? 'selected' : '' }}>Staff (Kasir, Transaksi, Edit Operasional Produk)</option>
                         <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin / Owner (Akses Penuh Seluruh Sistem)</option>
                     </select>

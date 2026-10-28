@@ -333,4 +333,49 @@ class InventoryAndSalesTest extends TestCase
         $responseReport->assertViewHas('totalSales');
         $responseReport->assertViewHas('totalSalesCount');
     }
+
+    /**
+     * Uji 13: Admin dapat menghapus produk secara konsisten dan aman meskipun sudah memiliki riwayat transaksi (Soft Deletes)
+     */
+    public function test_admin_can_delete_product_safely_even_if_it_has_transactions(): void
+    {
+        $admin = User::where('role', 'admin')->first();
+
+        // Ambil produk yang sudah memiliki relasi transaksi
+        $product = Product::whereHas('saleItems')->first();
+        $this->assertNotNull($product, 'Harus ada produk dengan riwayat penjualan');
+
+        $productId = $product->id;
+        $productName = $product->name;
+
+        // Admin melakukan penghapusan produk
+        $responseDelete = $this->actingAs($admin)->delete('/admin/products/' . $productId);
+        $responseDelete->assertRedirect('/admin/products');
+        $responseDelete->assertSessionHas('success');
+
+        // Produk hilang dari daftar aktif
+        $this->assertNull(Product::find($productId));
+
+        // Namun data produk tetap tersimpan sebagai soft-deleted tanpa merusak foreign key
+        $trashedProduct = Product::withTrashed()->find($productId);
+        $this->assertNotNull($trashedProduct);
+        $this->assertNotNull($trashedProduct->deleted_at);
+
+        // Riwayat penjualan item masih dapat membaca nama produk tanpa error
+        $saleItem = \App\Models\SaleItem::where('product_id', $productId)->first();
+        $this->assertNotNull($saleItem);
+        $this->assertEquals($productName, $saleItem->product->name);
+    }
+
+    /**
+     * Uji 14: Staff DITOLAK (403 Forbidden) saat mencoba menghapus produk
+     */
+    public function test_staff_cannot_delete_product(): void
+    {
+        $staff = User::where('role', 'staff')->first();
+        $product = Product::first();
+
+        $responseDelete = $this->actingAs($staff)->delete('/admin/products/' . $product->id);
+        $responseDelete->assertStatus(403);
+    }
 }

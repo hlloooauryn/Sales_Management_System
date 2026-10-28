@@ -1010,6 +1010,33 @@ img {
     border: 1px solid var(--color-sky-blue);
 }
 
+.badge-primary {
+    background-color: var(--color-sage-green-light);
+    color: var(--color-sage-green-dark);
+    border: 1px solid #C4E3C1;
+}
+
+.badge-info {
+    background-color: var(--color-sky-blue-light);
+    color: #2D6B8F;
+    border: 1px solid var(--color-sky-blue);
+}
+
+.payment-method-card {
+    transition: var(--transition);
+}
+
+.payment-method-card:hover {
+    border-color: var(--color-sage-green) !important;
+    background-color: var(--color-butter-yellow-light) !important;
+}
+
+.payment-method-card:has(input:checked) {
+    border-color: var(--color-sage-green-dark) !important;
+    background-color: var(--color-warm-ivory) !important;
+    box-shadow: 0 0 0 1px var(--color-sage-green);
+}
+
 /* Alert Boxes */
 .alert {
     padding: 14px 20px;

@@ -28,6 +28,16 @@ class AppServiceProvider extends ServiceProvider
             $view->with('siteLogo', Setting::logoUrl());
             $view->with('sitePhone', Setting::get('phone', '0812-9988-7766'));
             $view->with('siteAddress', Setting::get('address', 'Jl. Cendana No. 18, Kebayoran Baru, Jakarta Selatan'));
+
+            // Hitung total tangkai bunga dalam keranjang belanja
+            $cart = session()->get('cart', []);
+            $cartCount = 0;
+            if (is_array($cart)) {
+                foreach ($cart as $item) {
+                    $cartCount += isset($item['quantity']) ? (int) $item['quantity'] : 0;
+                }
+            }
+            $view->with('cartCount', $cartCount);
         });
     }
 }

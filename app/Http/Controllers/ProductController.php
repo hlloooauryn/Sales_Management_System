@@ -177,7 +177,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Hapus produk (Khusus Admin & dilindungi foreign key)
+     * Hapus produk (Khusus Admin/Owner dengan Soft Deletes aman)
      */
     public function destroy(Product $product)
     {
@@ -185,16 +185,9 @@ class ProductController extends Controller
             abort(403, 'Akses Ditolak: Hanya Admin/Owner yang memiliki kewenangan menghapus produk.');
         }
 
-        // Cek riwayat pembelian & penjualan
-        $purchasesCount = $product->purchaseItems()->count();
-        $salesCount = $product->saleItems()->count();
-
-        if ($purchasesCount > 0 || $salesCount > 0) {
-            return back()->with('error', 'Produk "' . $product->name . '" tidak dapat dihapus karena sudah memiliki riwayat ' . ($purchasesCount + $salesCount) . ' transaksi (pembelian/penjualan). Untuk menonaktifkannya dari katalog publik, silakan edit dan uncheck "Status Aktif".');
-        }
-
+        $productName = $product->name;
         $product->delete();
 
-        return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus dari sistem.');
+        return redirect()->route('products.index')->with('success', 'Produk bunga "' . $productName . '" berhasil dihapus dari sistem.');
     }
 }

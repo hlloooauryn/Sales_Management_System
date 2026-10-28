@@ -43,9 +43,13 @@
                             </td>
                             <td>{{ $u->email }}</td>
                             <td>
-                                <span class="badge {{ $u->isAdmin() ? 'role-admin' : 'role-staff' }}">
-                                    {{ strtoupper($u->role) }}
-                                </span>
+                                @if($u->isAdmin())
+                                    <span class="badge role-admin">ADMIN</span>
+                                @elseif($u->isStaff())
+                                    <span class="badge role-staff">STAFF</span>
+                                @else
+                                    <span class="badge" style="background-color: var(--color-soft-lavender-light); color: var(--color-soft-lavender-dark); border: 1px solid var(--color-soft-lavender);">USER (PELANGGAN)</span>
+                                @endif
                             </td>
                             <td style="font-size: 12.5px; color: var(--color-text-muted);">
                                 {{ $u->purchases()->count() }} Pembelian • {{ $u->sales()->count() }} Penjualan

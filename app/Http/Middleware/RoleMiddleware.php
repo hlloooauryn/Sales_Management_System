@@ -28,6 +28,11 @@ class RoleMiddleware
             return $next($request);
         }
 
+        // Jika role user/pelanggan mencoba masuk ke backoffice internal
+        if ($user->isUser()) {
+            return redirect()->route('home')->with('error', 'Akses Ditolak: Menu backoffice hanya dapat diakses oleh Staf dan Administrator Bloom Moment.');
+        }
+
         abort(403, 'Akses Ditolak: Akun Anda (' . ucfirst($user->role) . ') tidak memiliki kewenangan untuk mengakses halaman ini.');
     }
 }

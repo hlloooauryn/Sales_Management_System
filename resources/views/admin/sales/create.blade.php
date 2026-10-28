@@ -106,10 +106,34 @@
                 <div class="form-group">
                     <label class="form-label" for="payment_method">Metode Pembayaran <span class="req">*</span></label>
                     <select name="payment_method" id="payment_method" class="form-control" required>
-                        <option value="Cash" {{ old('payment_method') === 'Cash' ? 'selected' : '' }}>💵 Tunai (Cash)</option>
-                        <option value="QRIS" {{ old('payment_method') === 'QRIS' ? 'selected' : '' }}>📱 QRIS / E-Wallet</option>
-                        <option value="Transfer" {{ old('payment_method') === 'Transfer' ? 'selected' : '' }}>🏦 Transfer Bank</option>
-                        <option value="Debit Card" {{ old('payment_method') === 'Debit Card' ? 'selected' : '' }}>💳 Kartu Debit</option>
+                        <optgroup label="💵 Tunai & COD">
+                            <option value="Cash" {{ old('payment_method') === 'Cash' ? 'selected' : '' }}>💵 Tunai di Kasir (Cash)</option>
+                            <option value="COD" {{ old('payment_method') === 'COD' ? 'selected' : '' }}>🛵 COD (Bayar di Tempat ke Kurir)</option>
+                        </optgroup>
+                        <optgroup label="📱 QRIS & Dompet Digital">
+                            <option value="QRIS" {{ old('payment_method') === 'QRIS' ? 'selected' : '' }}>📱 QRIS Real-Time Scan</option>
+                            <option value="GoPay" {{ old('payment_method') === 'GoPay' ? 'selected' : '' }}>🟢 GoPay</option>
+                            <option value="OVO" {{ old('payment_method') === 'OVO' ? 'selected' : '' }}>🟣 OVO Cash</option>
+                            <option value="DANA" {{ old('payment_method') === 'DANA' ? 'selected' : '' }}>🔵 DANA</option>
+                            <option value="ShopeePay" {{ old('payment_method') === 'ShopeePay' ? 'selected' : '' }}>🟠 ShopeePay</option>
+                        </optgroup>
+                        <optgroup label="🏦 Transfer Bank">
+                            <option value="Transfer BCA" {{ old('payment_method') === 'Transfer BCA' ? 'selected' : '' }}>🏦 Transfer BCA</option>
+                            <option value="Transfer Mandiri" {{ old('payment_method') === 'Transfer Mandiri' ? 'selected' : '' }}>🏦 Transfer Mandiri</option>
+                            <option value="Transfer BNI" {{ old('payment_method') === 'Transfer BNI' ? 'selected' : '' }}>🏦 Transfer BNI</option>
+                            <option value="Transfer BRI" {{ old('payment_method') === 'Transfer BRI' ? 'selected' : '' }}>🏦 Transfer BRI</option>
+                            <option value="Transfer BSI" {{ old('payment_method') === 'Transfer BSI' ? 'selected' : '' }}>🕌 Transfer BSI (Syariah)</option>
+                            <option value="Transfer" {{ old('payment_method') === 'Transfer' ? 'selected' : '' }}>🏦 Transfer Bank Lainnya</option>
+                        </optgroup>
+                        <optgroup label="💳 Kartu & EDC">
+                            <option value="Debit Card" {{ old('payment_method') === 'Debit Card' ? 'selected' : '' }}>💳 Kartu Debit (Mesin EDC)</option>
+                            <option value="Credit Card" {{ old('payment_method') === 'Credit Card' ? 'selected' : '' }}>💳 Kartu Kredit (Visa/Mastercard)</option>
+                        </optgroup>
+                        <optgroup label="⚡ Virtual Account & Gerai">
+                            <option value="Virtual Account" {{ old('payment_method') === 'Virtual Account' ? 'selected' : '' }}>⚡ Virtual Account (VA)</option>
+                            <option value="Indomaret" {{ old('payment_method') === 'Indomaret' ? 'selected' : '' }}>🏪 Gerai Indomaret</option>
+                            <option value="Alfamart" {{ old('payment_method') === 'Alfamart' ? 'selected' : '' }}>🏪 Gerai Alfamart</option>
+                        </optgroup>
                     </select>
                 </div>
 

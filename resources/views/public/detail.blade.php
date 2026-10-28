@@ -56,22 +56,71 @@
                 </p>
             </div>
 
-            <!-- WhatsApp Inquiries Action -->
+            <!-- Online Purchase & Cart Actions -->
             <div style="margin-bottom: 28px;">
                 @if($product->stock > 0)
-                    <a href="https://wa.me/6281293038852?text=Halo%20Bloom%20Moment,%20saya%20tertarik%20dengan%20bunga%20{{ urlencode($product->name) }}%20(Harga%20Rp%20{{ number_format($product->sell_price, 0, ',', '.') }})." target="_blank" class="btn btn-primary" style="padding: 14px 26px; font-size: 15px; display: inline-flex;">
-                        💬 Pesan via WhatsApp Florist
-                    </a>
+                    <form action="{{ route('cart.add') }}" method="POST" style="margin-bottom: 16px;">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+                        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 18px;">
+                            <label for="quantity" style="font-weight: 600; font-size: 14px; color: var(--color-dark-brown);">
+                                Jumlah Tangkai / Item:
+                            </label>
+                            <div style="display: inline-flex; align-items: center; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: #FFFFFF; overflow: hidden;">
+                                <button type="button" onclick="changeQty(-1)" style="border: none; background: transparent; padding: 8px 14px; cursor: pointer; font-size: 16px; font-weight: 700; color: var(--color-dark-brown);">-</button>
+                                <input type="number" name="quantity" id="detailQty" value="1" min="1" max="{{ $product->stock }}" style="width: 50px; text-align: center; border: none; font-weight: 700; font-size: 15px; outline: none;" readonly>
+                                <button type="button" onclick="changeQty(1)" style="border: none; background: transparent; padding: 8px 14px; cursor: pointer; font-size: 16px; font-weight: 700; color: var(--color-dark-brown);">+</button>
+                            </div>
+                            <span style="font-size: 13px; color: var(--color-text-muted);">
+                                (Maksimal {{ $product->stock }} tangkai)
+                            </span>
+                        </div>
+
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                            <!-- Tambah ke Keranjang -->
+                            <button type="submit" name="buy_now" value="0" class="btn btn-secondary" style="padding: 13px 22px; font-size: 15px; display: inline-flex; align-items: center; gap: 8px;">
+                                <span>🛒</span>
+                                <span>Tambah ke Keranjang</span>
+                            </button>
+
+                            <!-- Beli Langsung (Checkout) -->
+                            <button type="submit" name="buy_now" value="1" class="btn btn-primary" style="padding: 13px 26px; font-size: 15px; display: inline-flex; align-items: center; gap: 8px;">
+                                <span>⚡</span>
+                                <span>Beli Sekarang</span>
+                            </button>
+                        </div>
+                    </form>
                 @else
-                    <button class="btn btn-secondary" disabled style="opacity: 0.6; cursor: not-allowed; padding: 14px 26px;">
-                        ⚠️ Maaf, Stok Sedang Kosong
-                    </button>
+                    <div style="margin-bottom: 18px;">
+                        <button class="btn btn-secondary" disabled style="opacity: 0.6; cursor: not-allowed; padding: 14px 26px;">
+                            ⚠️ Maaf, Stok Sedang Kosong
+                        </button>
+                    </div>
                 @endif
 
-                <a href="{{ route('catalog') }}" class="btn btn-outline" style="padding: 14px 20px; margin-left: 10px;">
-                    ← Lihat Bunga Lainnya
-                </a>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <a href="https://wa.me/6281293038852?text=Halo%20Bloom%20Moment,%20saya%20tertarik%20dengan%20bunga%20{{ urlencode($product->name) }}%20(Harga%20Rp%20{{ number_format($product->sell_price, 0, ',', '.') }})." target="_blank" class="btn btn-outline btn-sm" style="padding: 10px 16px;">
+                        💬 Tanya Florist via WhatsApp
+                    </a>
+
+                    <a href="{{ route('catalog') }}" class="btn btn-outline btn-sm" style="padding: 10px 16px;">
+                        ← Lihat Bunga Lainnya
+                    </a>
+                </div>
             </div>
+
+            <script>
+                function changeQty(delta) {
+                    var input = document.getElementById('detailQty');
+                    var max = parseInt(input.getAttribute('max')) || 1;
+                    var val = parseInt(input.value) || 1;
+                    var newVal = val + delta;
+                    if (newVal >= 1 && newVal <= max) {
+                        input.value = newVal;
+                    }
+                }
+            </script>
 
             <!-- Florist Tips Box -->
             <div style="background-color: var(--color-sage-green-light); border: 1px solid #C9DCBE; border-radius: var(--radius-md); padding: 18px 20px;">

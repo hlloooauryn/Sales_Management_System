@@ -42,15 +42,46 @@
                     </ul>
                 </nav>
 
-                <!-- Internal Portal Action -->
-                <div>
+                <!-- Cart & Auth Actions -->
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <!-- Shopping Cart Button -->
+                    <a href="{{ route('cart.index') }}" class="btn btn-outline btn-sm" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; position: relative;" title="Lihat Keranjang Belanja">
+                        <span style="font-size: 16px;">🛒</span>
+                        <span style="font-weight: 600;">Keranjang</span>
+                        @if(($cartCount ?? 0) > 0)
+                            <span class="badge" style="background-color: var(--color-dusty-pink-dark); color: #FFFFFF; font-size: 11px; padding: 1px 7px; border-radius: 999px; font-weight: 700;">
+                                {{ $cartCount }}
+                            </span>
+                        @endif
+                    </a>
+
                     @auth
-                        <a href="{{ route('dashboard') }}" class="btn btn-secondary btn-sm">
-                            ⚙️ Dashboard ({{ Auth::user()->name }})
-                        </a>
+                        @if(Auth::user()->isAdmin() || Auth::user()->isStaff())
+                            <a href="{{ route('dashboard') }}" class="btn btn-secondary btn-sm" style="padding: 7px 14px;">
+                                ⚙️ Dashboard Backoffice
+                            </a>
+                        @else
+                            <!-- Menu Khusus Pelanggan / Role User -->
+                            <a href="{{ route('orders.index') }}" class="btn btn-outline btn-sm {{ request()->routeIs('orders.*') ? 'active' : '' }}" style="padding: 7px 12px;">
+                                🛍️ Pesanan Saya
+                            </a>
+                            <div style="font-size: 13px; font-weight: 600; color: var(--color-warm-brown); background: var(--color-butter-yellow-light); border: 1px solid var(--color-butter-yellow); padding: 5px 12px; border-radius: var(--radius-sm);">
+                                👤 {{ Str::limit(Auth::user()->name, 14) }}
+                            </div>
+                        @endif
+
+                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-sm" style="background: none; border: 1px solid var(--color-border); color: var(--color-text-muted); padding: 7px 10px;" title="Keluar dari akun">
+                                🚪 Keluar
+                            </button>
+                        </form>
                     @else
-                        <a href="{{ route('login') }}" class="btn btn-outline btn-sm">
-                            🔐 Portal Petugas
+                        <a href="{{ route('login') }}" class="btn btn-outline btn-sm" style="padding: 7px 12px;">
+                            Masuk
+                        </a>
+                        <a href="{{ route('register') }}" class="btn btn-primary btn-sm" style="padding: 7px 14px;">
+                            🌸 Daftar
                         </a>
                     @endauth
                 </div>
@@ -60,6 +91,22 @@
 
     <!-- Main Content -->
     <main>
+        <div class="pub-container" style="margin-top: 18px;">
+            @if(session('success'))
+                <div class="alert alert-success" style="margin-bottom: 20px;">
+                    <span style="font-size: 18px;">🌸</span>
+                    <div>{{ session('success') }}</div>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="alert alert-danger" style="margin-bottom: 20px;">
+                    <span style="font-size: 18px;">⚠️</span>
+                    <div>{{ session('error') }}</div>
+                </div>
+            @endif
+        </div>
+
         @yield('content')
     </main>
 

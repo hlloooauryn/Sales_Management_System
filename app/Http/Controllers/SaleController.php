@@ -22,8 +22,17 @@ class SaleController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('invoice_number', 'like', "%{$search}%")
-                  ->orWhere('customer_name', 'like', "%{$search}%");
+                  ->orWhere('customer_name', 'like', "%{$search}%")
+                  ->orWhere('customer_phone', 'like', "%{$search}%");
             });
+        }
+
+        if ($request->filled('order_type')) {
+            $query->where('order_type', $request->order_type);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
         }
 
         if ($request->filled('start_date')) {
@@ -72,7 +81,7 @@ class SaleController extends Controller
             'invoice_number' => 'required|string|max:50|unique:sales,invoice_number',
             'sale_date' => 'required|date',
             'customer_name' => 'nullable|string|max:100',
-            'payment_method' => 'required|string|in:Cash,Transfer,QRIS,Debit Card',
+            'payment_method' => 'required|string|max:50',
             'notes' => 'nullable|string|max:500',
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',
@@ -158,6 +167,20 @@ class SaleController extends Controller
     {
         $sale->load(['user', 'items.product.category']);
         return view('admin.sales.show', compact('sale'));
+    }
+
+    /**
+     * Perbarui status proses pesanan online (Staff & Admin)
+     */
+    public function updateStatus(Request $request, Sale $sale)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:pending,paid,processing,shipped,completed,cancelled',
+        ]);
+
+        $sale->update(['status' => $validated['status']]);
+
+        return back()->with('success', "Status pesanan {$sale->invoice_number} berhasil diperbarui menjadi '{$sale->status_label}'.");
     }
 
     /**

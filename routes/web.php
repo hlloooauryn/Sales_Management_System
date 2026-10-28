@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\PurchaseController;
@@ -15,17 +18,18 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes - Bloom Moment
+| Web Routes - Bloom Moment Florist
 |--------------------------------------------------------------------------
 |
-| Terbagi menjadi 2 bagian sesuai kebutuhan brief:
-| 1. Website Publik (Tanpa Login)
-| 2. Backoffice Internal (Wajib Login & Berbasis Peran Staff / Admin)
+| 1. Website Publik (Katalog, Detail, Keranjang Belanja)
+| 2. Autentikasi Pengguna (User / Pelanggan & Petugas Backoffice)
+| 3. Pembelian Online & Pembayaran (Role User / Pelanggan Wajib Login)
+| 4. Backoffice Internal (Staff & Admin Wajib Login)
 |
 */
 
 // ==========================================
-// 1. WEBSITE PUBLIK (TANPA LOGIN)
+// 1. WEBSITE PUBLIK & KATALOG BUNGA
 // ==========================================
 Route::get('/', [PublicController::class, 'index'])->name('home');
 Route::get('/catalog', [PublicController::class, 'catalog'])->name('catalog');
@@ -34,16 +38,42 @@ Route::get('/about', [PublicController::class, 'about'])->name('about');
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
 
 // ==========================================
-// 2. AUTENTIKASI PENGGUNA INTERNAL
+// 2. KERANJANG BELANJA (CART)
+// ==========================================
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+
+// ==========================================
+// 3. AUTENTIKASI PENGGUNA (LOGIN & REGISTER)
 // ==========================================
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ==========================================
-// 3. BACKOFFICE INTERNAL (WAJIB LOGIN)
+// 4. PEMBELIAN ONLINE & PESANAN (ROLE USER WAJIB LOGIN)
 // ==========================================
-Route::middleware(['auth'])->prefix('admin')->group(function () {
+Route::middleware(['auth'])->group(function () {
+    // Checkout & Pembayaran
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+
+    // Riwayat & Detail Pesanan Pelanggan
+    Route::get('/my-orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{invoice}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders/{invoice}/proof', [OrderController::class, 'uploadProof'])->name('orders.uploadProof');
+    Route::get('/orders/{invoice}/receipt', [OrderController::class, 'printReceipt'])->name('orders.receipt');
+});
+
+// ==========================================
+// 5. BACKOFFICE INTERNAL (STAFF & ADMIN)
+// ==========================================
+Route::middleware(['auth', 'role:admin,staff'])->prefix('admin')->group(function () {
     
     // Dashboard Operasional & Metrik Bisnis
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -60,11 +90,12 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::post('/purchases', [PurchaseController::class, 'store'])->name('purchases.store');
     Route::get('/purchases/{purchase}', [PurchaseController::class, 'show'])->name('purchases.show');
 
-    // Transaksi Penjualan / Barang Keluar Kasir (Staff & Admin)
+    // Transaksi Penjualan / Barang Keluar Kasir & Online (Staff & Admin)
     Route::get('/sales', [SaleController::class, 'index'])->name('sales.index');
     Route::get('/sales/create', [SaleController::class, 'create'])->name('sales.create');
     Route::post('/sales', [SaleController::class, 'store'])->name('sales.store');
     Route::get('/sales/{sale}', [SaleController::class, 'show'])->name('sales.show');
+    Route::post('/sales/{sale}/status', [SaleController::class, 'updateStatus'])->name('sales.status');
 
     // ==========================================
     // KHUSUS ADMIN / OWNER (ROLE: ADMIN)

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Petugas Internal — Bloom Moment</title>
+    <title>Masuk Akun — {{ $siteName ?? 'Bloom Moment' }}</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
@@ -12,13 +12,13 @@
             <div style="text-align: center; margin-bottom: 24px;">
                 @if(!empty($siteLogo))
                     <div style="margin-bottom: 14px;">
-                        <img src="{{ $siteLogo }}" alt="Bloom Moment" style="max-height: 52px; max-width: 190px; object-fit: contain; margin: 0 auto;">
+                        <img src="{{ $siteLogo }}" alt="{{ $siteName ?? 'Bloom Moment' }}" style="max-height: 52px; max-width: 190px; object-fit: contain; margin: 0 auto;">
                     </div>
                 @else
                     <div class="pub-brand-icon" style="margin: 0 auto 12px; width: 48px; height: 48px; font-size: 24px;">🌸</div>
-                    <h2 style="font-size: 24px; margin-bottom: 4px;">Bloom Moment</h2>
+                    <h2 style="font-size: 24px; margin-bottom: 4px;">{{ $siteName ?? 'Bloom Moment' }}</h2>
                 @endif
-                <p style="font-size: 13.5px; color: var(--color-text-muted);">Portal Masuk Pengelolaan Inventaris & Kasir</p>
+                <p style="font-size: 13.5px; color: var(--color-text-muted);">Portal Masuk Pelanggan & Petugas Backoffice</p>
             </div>
 
             @if(session('error'))
@@ -39,7 +39,7 @@
                 @csrf
                 <div class="form-group">
                     <label class="form-label" for="email">Alamat Email <span class="req">*</span></label>
-                    <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" placeholder="nama@bloommoment.com" required autofocus>
+                    <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" placeholder="nama@email.com" required autofocus>
                     @error('email')
                         <div class="form-error">{{ $message }}</div>
                     @enderror
@@ -61,29 +61,15 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 15px;">
-                    Masuk ke Backoffice
+                    🌸 Masuk ke Akun
                 </button>
             </form>
 
-            <!-- Akun Demo untuk Pengujian Cepat -->
-            <div class="login-demo-box">
-                <div class="login-demo-title">Akun Demo Pengujian (Klik untuk Isi Cepat):</div>
-                
-                <div class="demo-account-pill" onclick="fillAccount('admin@bloommoment.com')">
-                    <div>
-                        <strong>Owner / Admin</strong><br>
-                        <span style="color: var(--color-text-muted);">admin@bloommoment.com</span>
-                    </div>
-                    <span class="badge role-admin">Admin</span>
-                </div>
-
-                <div class="demo-account-pill" onclick="fillAccount('staff@bloommoment.com')">
-                    <div>
-                        <strong>Staff Florist</strong><br>
-                        <span style="color: var(--color-text-muted);">staff@bloommoment.com</span>
-                    </div>
-                    <span class="badge role-staff">Staff</span>
-                </div>
+            <div style="text-align: center; margin-top: 20px; padding: 12px; background-color: var(--color-butter-yellow-light); border: 1px solid var(--color-butter-yellow); border-radius: var(--radius-sm); font-size: 13.5px;">
+                Belum punya akun pembeli? 
+                <a href="{{ route('register') }}" style="color: var(--color-dark-brown); font-weight: 700; text-decoration: underline;">
+                    Daftar di sini →
+                </a>
             </div>
 
             <div style="text-align: center; margin-top: 24px; font-size: 13.5px;">
@@ -93,14 +79,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        function fillAccount(email) {
-            document.getElementById('email').value = email;
-            var passwordField = document.getElementById('password');
-            passwordField.value = '';
-            passwordField.focus();
-        }
-    </script>
 </body>
 </html>

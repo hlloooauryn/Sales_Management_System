@@ -132,13 +132,10 @@
                                 </a>
 
                                 @if(Auth::user()->isAdmin())
-                                    @php
-                                        $hasTx = ($prod->purchase_items_count ?? $prod->purchaseItems()->count()) + ($prod->sale_items_count ?? $prod->saleItems()->count()) > 0;
-                                    @endphp
-                                    <form action="{{ route('products.destroy', $prod->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
+                                    <form action="{{ route('products.destroy', $prod->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk {{ addslashes($prod->name) }}?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" style="padding: 4px 10px;" {{ $hasTx ? 'title="Produk telah memiliki riwayat transaksi" disabled style=opacity:0.4;cursor:not-allowed;' : '' }}>
+                                        <button type="submit" class="btn btn-danger btn-sm" style="padding: 4px 10px;" title="Hapus produk">
                                             🗑️ Hapus
                                         </button>
                                     </form>

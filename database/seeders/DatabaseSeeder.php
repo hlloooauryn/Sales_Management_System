@@ -47,6 +47,18 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        $customer = User::firstOrCreate(
+            ['email' => 'user@bloommoment.com'],
+            [
+                'name' => 'Rizka Customer',
+                'email' => 'user@bloommoment.com',
+                'phone' => '0812-3456-7890',
+                'address' => 'Jl. Kemang Raya No. 12, Kebayoran Baru, Jakarta Selatan',
+                'password' => Hash::make('user123'),
+                'role' => 'user',
+            ]
+        );
+
         // 2. Kategori Bunga
         $categoriesData = [
             [
@@ -311,6 +323,33 @@ class DatabaseSeeder extends Seeder
                 'quantity' => 1,
                 'unit_price' => 245000,
                 'subtotal' => 245000,
+            ]
+        );
+
+        // 7. Transaksi Penjualan Online Sampel (Pesanan Web oleh Pelanggan)
+        $onlineSale = Sale::firstOrCreate(
+            ['invoice_number' => 'INV-ONL-202610-0001'],
+            [
+                'user_id' => $customer->id,
+                'sale_date' => now()->toDateString(),
+                'delivery_date' => now()->addDay()->toDateString(),
+                'order_type' => 'online',
+                'status' => 'paid',
+                'customer_name' => 'Rizka Customer',
+                'customer_phone' => '0812-3456-7890',
+                'shipping_address' => 'Jl. Kemang Raya No. 12, Kebayoran Baru, Jakarta Selatan',
+                'payment_method' => 'Transfer BCA',
+                'total_amount' => 310000,
+                'notes' => 'Tolong sematkan kartu ucapan: Selamat Ulang Tahun ke-25, semoga bahagia selalu!',
+            ]
+        );
+
+        SaleItem::firstOrCreate(
+            ['sale_id' => $onlineSale->id, 'product_id' => $createdProducts[6]->id],
+            [
+                'quantity' => 1,
+                'unit_price' => 310000,
+                'subtotal' => 310000,
             ]
         );
     }
